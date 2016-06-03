@@ -39,6 +39,7 @@ class Node < ActiveRecord::Base
     count += right.count if right
     count
   end
+  #count is 3 problems: count self, count left, and count right 
   #can take out the self and just call left/right
 
   def max
