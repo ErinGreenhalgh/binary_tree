@@ -5,26 +5,41 @@ class Node < ActiveRecord::Base
 
   def insert(value)
     if value < self.value
-      if self.left
-        self.left.insert(value)
-      else
-        self.left = Node.create(value: value)
-      end
+      insert_left(value)
     elsif value > self.value
-      if self.right
-        self.right.insert(value)
-      else
-        self.right = Node.create(value: value)
-      end
+      insert_right(value)
     end
   end
 
+  #this method has 4 paths through the code;
+  #you can put the logic in different piles but can't refactor into fewer paths
+
+  def insert_left(value)
+    if self.left
+      self.left.insert(value)
+    else
+      self.left = Node.create(value: value)
+    end
+  end
+
+  def insert_right(value)
+    if self.right
+      self.right.insert(value)
+    else
+      self.right = Node.create(value: value)
+    end
+  end
+
+  #could write an insert side method, but this could
+  #just make it more annoying to read
+
   def count
     count = 1
-    count += self.left.count if self.left
-    count += self.right.count if self.right
+    count += left.count if left
+    count += right.count if right
     count
   end
+  #can take out the self and just call left/right
 
   def max
     unless self.right
@@ -40,5 +55,15 @@ class Node < ActiveRecord::Base
     else
       self.left.min
     end
+  end
+
+  # def min
+  #   if left
+  #     left.min
+  #   else
+  #     self.value
+  #   end
+  # end
+
   end
 end
